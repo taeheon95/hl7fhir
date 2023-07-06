@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.duzon.lulu'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-base
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:6.6.1'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-validation
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-validation:6.6.1'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-jpa
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-jpa:6.6.1'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-test-utilities
+    testImplementation 'ca.uhn.hapi.fhir:hapi-fhir-test-utilities:6.6.1'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir:6.6.1'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-spring-boot-autoconfigure
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-spring-boot-autoconfigure:6.6.1'
+    // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-spring-boot-starter
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-spring-boot-starter:6.6.1'
+    // https://mvnrepository.com/artifact/javax.transaction/jta
+    implementation 'javax.transaction:jta:1.1'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
