@@ -39,8 +39,9 @@ class PatientServiceTest {
         patient.setMeta(meta);
 
         Narrative narrative = new Narrative();
-        XhtmlNode xhtmlType = new XhtmlNode();
-        narrative.setDiv(xhtmlType);
+        XhtmlNode xhtmlNode = new XhtmlNode();
+        xhtmlNode.setContent("<div></div>");
+        narrative.setDiv(xhtmlNode);
         narrative.setStatus(Narrative.NarrativeStatus.GENERATED);
         patient.setText(narrative);
 
