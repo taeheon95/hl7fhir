@@ -1,4 +1,4 @@
-package com.duzon.lulu;
+package com.taeheon.fhir;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

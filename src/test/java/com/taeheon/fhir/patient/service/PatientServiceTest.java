@@ -1,4 +1,4 @@
-package com.duzon.lulu.fhir.service;
+package com.taeheon.fhir.patient.service;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PatientServiceTest {
 
