@@ -3,7 +3,6 @@ package com.taeheon.fhir.patient.service;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import org.hl7.fhir.r5.model.*;
-import org.hl7.fhir.utilities.xhtml.XhtmlNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -23,6 +22,7 @@ class PatientServiceTest {
     @BeforeAll
     static void beforeAll() {
         xmlParser.setPrettyPrint(true);
+        jsonParser.setPrettyPrint(true);
     }
 
     @Test
@@ -39,30 +39,72 @@ class PatientServiceTest {
         patient.setMeta(meta);
 
         Narrative narrative = new Narrative();
-        XhtmlNode xhtmlNode = new XhtmlNode();
-        xhtmlNode.setContent("<div></div>");
-        narrative.setDiv(xhtmlNode);
         narrative.setStatus(Narrative.NarrativeStatus.GENERATED);
         patient.setText(narrative);
 
+        List<Identifier> identifierList = new ArrayList<>();
+        Identifier identifier = new Identifier();
+        CodeableConcept codeableConcept = new CodeableConcept();
+        Coding coding = new Coding();
+        coding.setSystem("http://terminology.hl7.org/CodeSystem/v2-0203");
+        coding.setCode("MR");
+        codeableConcept.addCoding(coding);
+        identifier.setType(codeableConcept);
+        identifier.setSystem("urn:oid:1.2.3.4.5.6");
+        identifier.setValue("MR12345");
+        identifierList.add(identifier);
+        patient.setIdentifier(identifierList);
+
+        HumanName humanName = new HumanName();
+        humanName.setText("김환자");
+        List<HumanName> humanNameList = new ArrayList<>();
+        humanNameList.add(humanName);
+        patient.setName(humanNameList);
+
         ContactPoint telecom = new ContactPoint();
         telecom.setSystem(ContactPoint.ContactPointSystem.PHONE);
-        telecom.setValue("010-0000-0000");
+        telecom.setValue("010-1234-5678");
         patient.addTelecom(telecom);
 
         patient.setGender(Enumerations.AdministrativeGender.MALE);
 
         Calendar instance = Calendar.getInstance();
-        instance.set(2022, Calendar.SEPTEMBER, 12);
+        instance.set(2001, Calendar.JANUARY, 1);
         patient.setBirthDate(instance.getTime());
 
         Address address = new Address();
-        address.setText("부산시 운전구 어디동 어디 아파트 어디");
-        address.setPostalCode("10101");
+
+        List<Extension> addressExtensionList = new ArrayList<>();
+
+        StringType districtValue = new StringType();
+        districtValue.setValue("서울특별시 강남구");
+        Extension district = new Extension("district", districtValue);
+        addressExtensionList.add(district);
+
+        StringType roadNameValue = new StringType();
+        roadNameValue.setValue("일원로");
+        Extension roadName = new Extension("roadName", roadNameValue);
+        addressExtensionList.add(roadName);
+
+        StringType detailedAddressValue = new StringType();
+        detailedAddressValue.setValue("81");
+        Extension detailedAddress = new Extension("detailedAddress", detailedAddressValue);
+        addressExtensionList.add(detailedAddress);
+
+        StringType complementsValue = new StringType();
+        complementsValue.setValue("일원동");
+        Extension complements = new Extension("complements", complementsValue);
+        addressExtensionList.add(complements);
+
+        address.setText("서울특별시 강남구 일원로 81 (일원동)");
+        address.setPostalCode("06351");
+        address.setExtension(addressExtensionList);
         patient.addAddress(address);
 
         String patientXml = xmlParser.encodeResourceToString(patient);
+        String patientJson = jsonParser.encodeResourceToString(patient);
         log.info("\n{}",patientXml);
+        log.info("\n{}", patientJson);
     }
 
 }
