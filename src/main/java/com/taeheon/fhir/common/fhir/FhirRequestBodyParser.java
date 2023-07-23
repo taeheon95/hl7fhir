@@ -1,26 +1,25 @@
 package com.taeheon.fhir.common.fhir;
 
-import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.parser.JsonParser;
+import ca.uhn.fhir.parser.XmlParser;
 import jakarta.servlet.http.HttpServletRequest;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.MediaType;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.List;
-
 public class FhirRequestBodyParser implements HandlerMethodArgumentResolver {
 
-    private final IParser parser;
-    private final List<MediaType> supportedMediaTypeList;
+    private final JsonParser jsonParser;
+    private final XmlParser xmlParser;
 
-    public FhirRequestBodyParser(IParser parser, MediaType... supportedMediaTypeList) {
-        this.parser = parser;
-        this.supportedMediaTypeList = List.of(supportedMediaTypeList);
+    public FhirRequestBodyParser(JsonParser jsonParser, XmlParser xmlParser) {
+        this.jsonParser = jsonParser;
+        this.xmlParser = xmlParser;
     }
 
     @Override
@@ -33,13 +32,18 @@ public class FhirRequestBodyParser implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         ServletServerHttpRequest httpRequest = new ServletServerHttpRequest(httpServletRequest);
-        if (supportedMediaTypeList.stream().anyMatch(type -> type.equals(httpRequest.getHeaders().getContentType()))) {
-            return parser.parseResource(
+        if (httpServletRequest.getContentType().equals("application/json") || httpServletRequest.getContentType().equals("application/fhir+json")) {
+            return jsonParser.parseResource(
+                    parameter.getParameterType().asSubclass(IBaseResource.class),
+                    httpRequest.getBody()
+            );
+        } else if (httpServletRequest.getContentType().equals("application/xml") || httpServletRequest.getContentType().equals("application/fhir+xml")) {
+            return xmlParser.parseResource(
                     parameter.getParameterType().asSubclass(IBaseResource.class),
                     httpRequest.getBody()
             );
         } else {
-            return null;
+            throw new HttpMediaTypeNotSupportedException(httpServletRequest.getContentType());
         }
     }
 }

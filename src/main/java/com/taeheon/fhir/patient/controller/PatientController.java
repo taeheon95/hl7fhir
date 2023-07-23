@@ -95,9 +95,7 @@ public class PatientController {
         return patient;
     }
 
-    @PostMapping(
-            consumes = {"application/fhir+xml", "application/fhir+json", MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
-    )
+    @PostMapping(produces={"application/fhir+xml", "application/fhir+json", MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Patient postPatient(@FhirBody Patient patient) {
         return patient;
     }
