@@ -24,7 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new FhirRequestBodyParser(jsonParser, xmlParser));
-//        resolvers.add(0, new FhirRequestBodyParser(jsonParser, MediaType.APPLICATION_JSON, FhirMediaTypes.FhirJson));
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     }
 
