@@ -3,8 +3,10 @@ package com.taeheon.fhir.common.fhir;
 import ca.uhn.fhir.parser.JsonParser;
 import ca.uhn.fhir.parser.XmlParser;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -12,6 +14,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+@Slf4j
 public class FhirRequestBodyParser implements HandlerMethodArgumentResolver {
 
     private final JsonParser jsonParser;
@@ -32,18 +35,17 @@ public class FhirRequestBodyParser implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         ServletServerHttpRequest httpRequest = new ServletServerHttpRequest(httpServletRequest);
-        if (httpServletRequest.getContentType().equals("application/json") || httpServletRequest.getContentType().equals("application/fhir+json")) {
-            return jsonParser.parseResource(
+        MediaType mediaType = MediaType.valueOf(httpServletRequest.getContentType());
+        return switch (mediaType.getSubtype()) {
+            case "json", "fhir+json" -> jsonParser.parseResource(
                     parameter.getParameterType().asSubclass(IBaseResource.class),
                     httpRequest.getBody()
             );
-        } else if (httpServletRequest.getContentType().equals("application/xml") || httpServletRequest.getContentType().equals("application/fhir+xml")) {
-            return xmlParser.parseResource(
+            case "xml", "fhir+xml" -> xmlParser.parseResource(
                     parameter.getParameterType().asSubclass(IBaseResource.class),
                     httpRequest.getBody()
             );
-        } else {
-            throw new HttpMediaTypeNotSupportedException(httpServletRequest.getContentType());
-        }
+            default -> throw new HttpMediaTypeNotSupportedException(httpServletRequest.getContentType());
+        };
     }
 }
