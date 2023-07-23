@@ -103,6 +103,8 @@ class PatientServiceTest {
 
         String patientXml = xmlParser.encodeResourceToString(patient);
         String patientJson = jsonParser.encodeResourceToString(patient);
+        Patient patient1 = xmlParser.parseResource(Patient.class, patientXml);
+        log.info("{}", patient1);
         log.info("\n{}",patientXml);
         log.info("\n{}", patientJson);
     }

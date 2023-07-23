@@ -17,9 +17,9 @@ public class FhirConverter implements HttpMessageConverter<IBaseResource> {
     private final IParser parser;
     private final List<MediaType> supportedMediaTypeList;
 
-    public FhirConverter(IParser parser, MediaType fhirMediaType, MediaType normalMediaType) {
+    public FhirConverter(IParser parser, MediaType ...mediaTypeList) {
         this.parser = parser;
-        this.supportedMediaTypeList = List.of(new MediaType[]{fhirMediaType, normalMediaType});
+        this.supportedMediaTypeList = List.of(mediaTypeList);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class FhirConverter implements HttpMessageConverter<IBaseResource> {
 
     @Override
     public boolean canWrite(Class<?> clazz, MediaType mediaType) {
-        return clazz.isAssignableFrom(IBaseResource.class)
+        return IBaseResource.class.isAssignableFrom(clazz)
                 && supportedMediaTypeList.stream().anyMatch(type -> type.equals(mediaType));
     }
 

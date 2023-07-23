@@ -1,15 +1,10 @@
 package com.taeheon.fhir.patient.controller;
 
-import ca.uhn.fhir.parser.IParser;
+import com.taeheon.fhir.common.fhir.FhirBody;
 import lombok.RequiredArgsConstructor;
 import org.hl7.fhir.r5.model.*;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,16 +12,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/hl7fhir/patient")
+@RequestMapping("/patient")
 public class PatientController {
 
-    private final IParser parser;
-
-    @GetMapping(value ="/{id}", produces = {"application/fhir+json"})
-    public ResponseEntity<?> getResult() {
+    @GetMapping(value = "/{id}", produces = {"application/fhir+xml", "application/fhir+json", MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Patient getResult(@PathVariable String id) {
 
         Patient patient = new Patient();
-        patient.setId("1");
+        patient.setId(id);
 
         Meta meta = new Meta();
         List<CanonicalType> profileList = new ArrayList<>();
@@ -98,8 +91,14 @@ public class PatientController {
         address.setPostalCode("06351");
         address.setExtension(addressExtensionList);
         patient.addAddress(address);
-        parser.setPrettyPrint(true);
 
-        return ResponseEntity.ok(parser.encodeResourceToString(patient));
+        return patient;
+    }
+
+    @PostMapping(
+            consumes = {"application/fhir+xml", "application/fhir+json", MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public Patient postPatient(@FhirBody Patient patient) {
+        return patient;
     }
 }
