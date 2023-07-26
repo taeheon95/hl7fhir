@@ -30,19 +30,19 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-base
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:6.6.1'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-base:6.6.2'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-validation
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir-validation:6.6.1'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-validation:6.6.2'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-jpa
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir-jpa:6.6.1'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-jpa:6.6.2'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-test-utilities
-    testImplementation 'ca.uhn.hapi.fhir:hapi-fhir-test-utilities:6.6.1'
+    testImplementation 'ca.uhn.hapi.fhir:hapi-fhir-test-utilities:6.6.2'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir:6.6.1'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir:6.6.2'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-spring-boot-autoconfigure
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir-spring-boot-autoconfigure:6.6.1'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-spring-boot-autoconfigure:6.6.2'
     // https://mvnrepository.com/artifact/ca.uhn.hapi.fhir/hapi-fhir-spring-boot-starter
-    implementation 'ca.uhn.hapi.fhir:hapi-fhir-spring-boot-starter:6.6.1'
+    implementation 'ca.uhn.hapi.fhir:hapi-fhir-spring-boot-starter:6.6.2'
     // https://mvnrepository.com/artifact/javax.transaction/jta
     implementation 'javax.transaction:jta:1.1'
     testImplementation 'io.projectreactor:reactor-test'
