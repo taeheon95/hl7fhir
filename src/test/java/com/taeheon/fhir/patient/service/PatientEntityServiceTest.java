@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-class PatientServiceTest {
+class PatientEntityServiceTest {
 
     final Logger log = LoggerFactory.getLogger(this.getClass());
     static FhirContext fhirContext = FhirContext.forR5();
